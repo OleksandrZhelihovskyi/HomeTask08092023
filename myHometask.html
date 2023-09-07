@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>title</title>
+</head>
+
+<body>
+  <script>
+
+    function compute(a, b) {
+      return Math.floor(Math.random() * 1_000_000) + a + b;
+    }
+
+    function memorize(fn) {
+      
+       let result = {}
+
+        return function(...args){
+          if(!result[Array.from(arguments)])
+          {let currentResult = fn(...args);
+            result[Array.from(arguments)] = currentResult;
+          return currentResult;
+          }
+          else {console.log('fail');
+            return result[Array.from(arguments)]
+          }
+             
+        }
+    }
+    
+    const computeMemorized = memorize(compute);
+
+    console.log(computeMemorized(1, 1)) // припустимо повертає 8
+    console.log(computeMemorized(1, 2)) // припустимо повертає 122
+    console.log(computeMemorized(1, 2)) // має повернути 122 - виклик compute не має відбутись
+    console.log(computeMemorized(1, 2)) // має повернути 122 - виклик compute не має відбутись
+    console.log(computeMemorized(1, 1)) // має повернути 8 - виклик compute не має відбутись
+    console.log(computeMemorized(1, 1)) // має повернути 8 - виклик compute не має відбутись
+    
+  </script>
+</body>
+
+</html>

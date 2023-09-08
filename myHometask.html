@@ -14,31 +14,35 @@
     }
 
     function memorize(fn) {
+
+      let result = {}
+
+      return function (...args) {
+        for(let i in args)
+          if(typeof(args[i]) == 'object')
+            {args[i] = Object.values(args[i])[0]; }
       
-       let result = {}
-
-        return function(...args){
-          if(!result[Array.from(arguments)])
-          {let currentResult = fn(...args);
-            result[Array.from(arguments)] = currentResult;
+        if (!result[Array.from(args)]) {
+          let currentResult = fn(...args);
+          result[Array.from(args)] = currentResult;
           return currentResult;
-          }
-          else {console.log('fail');
-            return result[Array.from(arguments)]
-          }
-             
         }
-    }
-    
-    const computeMemorized = memorize(compute);
+        else {
+          console.log('fail');
+          return result[Array.from(args)]
+        }
 
-    console.log(computeMemorized(1, 1)) // припустимо повертає 8
-    console.log(computeMemorized(1, 2)) // припустимо повертає 122
+      }
+    }
+
+    const computeMemorized = memorize(compute);
+    console.log(computeMemorized({value:1}, {value:1})) // припустимо повертає 8
+    console.log(computeMemorized({value:1}, {value:2})) // припустимо повертає 122
     console.log(computeMemorized(1, 2)) // має повернути 122 - виклик compute не має відбутись
     console.log(computeMemorized(1, 2)) // має повернути 122 - виклик compute не має відбутись
     console.log(computeMemorized(1, 1)) // має повернути 8 - виклик compute не має відбутись
     console.log(computeMemorized(1, 1)) // має повернути 8 - виклик compute не має відбутись
-    
+
   </script>
 </body>
 
